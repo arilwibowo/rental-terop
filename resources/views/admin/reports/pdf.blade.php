@@ -18,7 +18,7 @@
 </head>
 <body>
     <h1>Laporan Rental Terop Astika</h1>
-    <p class="muted">Tahun {{ $year }}</p>
+    <p class="muted">Tahun {{ $year }} - berdasarkan Tanggal Pasang / Tanggal Acara</p>
 
     <div class="summary">
         <p><strong>Total Booking:</strong> {{ $totalBookings }}</p>
@@ -27,6 +27,7 @@
 
     <div class="section">
         <h3>Booking per Bulan & Pendapatan</h3>
+        <p class="muted">Dihitung berdasarkan Tanggal Pasang / Tanggal Acara, bukan tanggal transaksi.</p>
         <table>
             <thead>
                 <tr>

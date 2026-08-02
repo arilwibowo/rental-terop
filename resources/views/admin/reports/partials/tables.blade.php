@@ -1,6 +1,7 @@
 <div class="card content-card mb-4">
     <div class="card-body">
-        <h5 class="fw-bold mb-3">Booking per Bulan & Pendapatan</h5>
+        <h5 class="fw-bold mb-1">Booking per Bulan & Pendapatan</h5>
+        <p class="text-muted small mb-3">Dihitung berdasarkan Tanggal Pasang / Tanggal Acara, bukan tanggal transaksi.</p>
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">

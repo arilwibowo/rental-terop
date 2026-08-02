@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -16,8 +17,9 @@ class HomeController extends Controller
             ->latest()
             ->limit(6)
             ->get();
+        $setting = WebsiteSetting::current();
 
-        return view('home', compact('products'));
+        return view('home', compact('products', 'setting'));
     }
 
     public function products(Request $request): View
@@ -38,7 +40,8 @@ class HomeController extends Controller
             ->withQueryString();
 
         $selectedCategory = $request->category;
+        $setting = WebsiteSetting::current();
 
-        return view('products', compact('categories', 'products', 'selectedCategory'));
+        return view('products', compact('categories', 'products', 'selectedCategory', 'setting'));
     }
 }

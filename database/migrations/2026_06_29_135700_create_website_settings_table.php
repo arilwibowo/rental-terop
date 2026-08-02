@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('website_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('admin_whatsapp')->default('6281234567890');
+            $table->string('admin_whatsapp')->default('6281333561155');
             $table->timestamps();
         });
     }

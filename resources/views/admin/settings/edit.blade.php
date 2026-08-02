@@ -31,7 +31,7 @@
                             <div class="mb-3">
                                 <label for="admin_whatsapp" class="form-label">Nomor WhatsApp Admin</label>
                                 <input type="text" class="form-control @error('admin_whatsapp') is-invalid @enderror" id="admin_whatsapp" name="admin_whatsapp" value="{{ old('admin_whatsapp', $setting->admin_whatsapp) }}" required>
-                                <div class="form-text">Gunakan format 62, contoh: 6281234567890.</div>
+                                <div class="form-text">Gunakan format 62, contoh: 6281333561155.</div>
                                 @error('admin_whatsapp')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 

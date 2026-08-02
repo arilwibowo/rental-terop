@@ -120,6 +120,99 @@
             background-color: #f59e0b;
             border-color: #f59e0b;
         }
+
+        @media (max-width: 575.98px) {
+            .products-hero {
+                padding-top: 2.5rem !important;
+                padding-bottom: 2.5rem !important;
+            }
+
+            .products-hero h1 {
+                font-size: 1.85rem;
+            }
+
+            .products-hero .lead {
+                font-size: .92rem;
+                line-height: 1.55;
+            }
+
+            section.py-5 {
+                padding-top: 2.2rem !important;
+                padding-bottom: 2.2rem !important;
+            }
+
+            section.py-5 .container {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .col-lg-9 .row {
+                --bs-gutter-x: .45rem;
+                --bs-gutter-y: .45rem;
+            }
+
+            .filter-card {
+                border-radius: 16px;
+            }
+
+            .filter-card .card-body {
+                padding: .85rem;
+            }
+
+            .filter-card h5 {
+                font-size: .95rem;
+            }
+
+            .filter-card .list-group-item {
+                padding: .5rem .65rem;
+                font-size: .82rem;
+            }
+
+            .product-card-premium {
+                border-radius: 16px;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, .08) !important;
+            }
+
+            .product-image,
+            .product-placeholder {
+                height: 64px;
+            }
+
+            .product-card-premium .card-body {
+                padding: .45rem;
+            }
+
+            .product-card-premium .badge {
+                font-size: .48rem;
+                white-space: normal;
+            }
+
+            .product-card-premium .card-title {
+                font-size: .64rem;
+                line-height: 1.2;
+                margin-bottom: .25rem;
+            }
+
+            .product-card-premium .card-text {
+                display: none;
+            }
+
+            .product-price {
+                font-size: .62rem;
+                margin-bottom: .15rem !important;
+            }
+
+            .product-card-premium .small {
+                font-size: .55rem;
+                margin-bottom: .35rem !important;
+            }
+
+            .product-card-premium .btn {
+                padding: .32rem .2rem;
+                font-size: .52rem;
+                line-height: 1.2;
+            }
+        }
     </style>
 </head>
 <body>
@@ -174,7 +267,7 @@
                     </p>
                 </div>
                 <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
-                    <a href="https://wa.me/6281234567890" class="btn btn-gold btn-lg fw-semibold" target="_blank">
+                    <a href="https://wa.me/{{ $setting->admin_whatsapp }}" class="btn btn-gold btn-lg fw-semibold" target="_blank">
                         Konsultasi via WhatsApp
                     </a>
                 </div>
@@ -221,7 +314,7 @@
                     <div class="row g-4">
                         @forelse ($products as $product)
                             @php $isOutOfStock = $product->stock < 1; @endphp
-                            <div class="col-md-6 col-xl-4">
+                            <div class="col-3 col-md-6 col-xl-4">
                                 <div class="card h-100 border-0 product-card-premium">
                                     @if ($product->image)
                                         <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">

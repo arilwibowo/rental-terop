@@ -16,7 +16,7 @@ class WebsiteSetting extends Model
     public static function current(): self
     {
         return self::firstOrCreate([], [
-            'admin_whatsapp' => '6281234567890',
+            'admin_whatsapp' => '6281333561155',
         ]);
     }
 }

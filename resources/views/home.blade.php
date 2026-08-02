@@ -290,6 +290,122 @@
                 margin-right: 18px;
             }
         }
+
+        @media (max-width: 575.98px) {
+            .products-premium {
+                padding-top: 2.5rem !important;
+                padding-bottom: 2.5rem !important;
+            }
+
+            .products-premium .container,
+            .contact-premium .container {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .products-premium .row {
+                --bs-gutter-x: .45rem;
+                --bs-gutter-y: .45rem;
+            }
+
+            .section-eyebrow {
+                padding: 5px 10px;
+                font-size: .68rem;
+            }
+
+            .products-premium h2,
+            .contact-premium h2 {
+                font-size: 1.45rem;
+            }
+
+            .products-premium p,
+            .contact-premium p {
+                font-size: .85rem;
+            }
+
+            .product-card-premium {
+                border-radius: 16px;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, .08) !important;
+            }
+
+            .product-image,
+            .product-placeholder {
+                height: 64px;
+            }
+
+            .product-card-premium .card-body {
+                padding: .45rem;
+            }
+
+            .product-card-premium .badge {
+                font-size: .48rem;
+                white-space: normal;
+            }
+
+            .product-card-premium .card-title {
+                font-size: .64rem;
+                line-height: 1.2;
+                margin-bottom: .25rem;
+            }
+
+            .product-card-premium .card-text {
+                display: none;
+            }
+
+            .product-price {
+                font-size: .62rem;
+                margin-bottom: .15rem !important;
+            }
+
+            .product-card-premium .small {
+                font-size: .55rem;
+                margin-bottom: .35rem !important;
+            }
+
+            .product-card-premium .btn {
+                padding: .32rem .2rem;
+                font-size: .52rem;
+                line-height: 1.2;
+            }
+
+            .contact-premium .row {
+                --bs-gutter-x: .55rem;
+                --bs-gutter-y: .55rem;
+            }
+
+            .contact-card {
+                border-radius: 16px;
+            }
+
+            .contact-card .card-body {
+                padding: .7rem;
+            }
+
+            .contact-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: 12px;
+                font-size: .72rem;
+                margin-bottom: .55rem;
+            }
+
+            .contact-card h5 {
+                font-size: .82rem;
+            }
+
+            .contact-card p {
+                font-size: .72rem;
+                line-height: 1.35;
+            }
+
+            .contact-card .btn {
+                width: 100%;
+                padding: .4rem .25rem;
+                font-size: .68rem;
+                line-height: 1.2;
+                word-break: break-word;
+            }
+        }
     </style>
 </head>
 <body>
@@ -359,7 +475,7 @@
                             <a href="{{ route('products') }}" class="btn btn-warning btn-lg px-4 fw-semibold">
                                 Lihat Produk
                             </a>
-                            <a href="https://wa.me/6281234567890" class="btn btn-outline-light btn-lg px-4" target="_blank">
+                            <a href="https://wa.me/{{ $setting->admin_whatsapp }}" class="btn btn-outline-light btn-lg px-4" target="_blank">
                                 Hubungi Admin via WhatsApp
                             </a>
                         </div>
@@ -402,7 +518,7 @@
             <div class="row g-4">
                 @forelse ($products as $product)
                     @php $isOutOfStock = $product->stock < 1; @endphp
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-3 col-md-6 col-lg-4">
                         <div class="card h-100 border-0 product-card-premium">
                             @if ($product->image)
                                 <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
@@ -490,20 +606,20 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-md-4">
+                <div class="col-4 col-md-4">
                     <div class="card contact-card">
                         <div class="card-body">
                             <div class="contact-icon">WA</div>
                             <h5 class="fw-bold">WhatsApp</h5>
                             <p class="text-muted mb-3">Tanya harga dan ketersediaan produk.</p>
-                            <a href="https://wa.me/6281234567890" class="btn btn-gold fw-semibold">
+                            <a href="https://wa.me/{{ $setting->admin_whatsapp }}" class="btn btn-gold fw-semibold">
                                 Chat WhatsApp
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-4 col-md-4">
                     <div class="card contact-card">
                         <div class="card-body">
                             <div class="contact-icon">IG</div>
@@ -518,7 +634,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-4 col-md-4">
                     <div class="card contact-card">
                         <div class="card-body">
                             <div class="contact-icon">LO</div>

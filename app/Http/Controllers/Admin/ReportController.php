@@ -30,16 +30,18 @@ class ReportController extends Controller
     private function reportData(Request $request): array
     {
         $year = (int) $request->input('year', now()->year);
+        $scheduleDateColumn = 'COALESCE(rental_start_date, event_date)';
+        $qualifiedScheduleDateColumn = 'COALESCE(bookings.rental_start_date, bookings.event_date)';
 
-        $monthlyBookings = Booking::selectRaw('MONTH(created_at) as month, COUNT(*) as total_booking')
-            ->whereYear('created_at', $year)
-            ->groupByRaw('MONTH(created_at)')
+        $monthlyBookings = Booking::selectRaw("MONTH($scheduleDateColumn) as month, COUNT(*) as total_booking")
+            ->whereYear(DB::raw($scheduleDateColumn), $year)
+            ->groupByRaw("MONTH($scheduleDateColumn)")
             ->pluck('total_booking', 'month');
 
-        $monthlyRevenue = Booking::selectRaw('MONTH(created_at) as month, SUM(total_price) as total_revenue')
-            ->whereYear('created_at', $year)
+        $monthlyRevenue = Booking::selectRaw("MONTH($scheduleDateColumn) as month, SUM(total_price) as total_revenue")
+            ->whereYear(DB::raw($scheduleDateColumn), $year)
             ->whereIn('payment_status', self::PAID_STATUSES)
-            ->groupByRaw('MONTH(created_at)')
+            ->groupByRaw("MONTH($scheduleDateColumn)")
             ->pluck('total_revenue', 'month');
 
         $months = collect(range(1, 12))->map(function ($month) use ($monthlyBookings, $monthlyRevenue) {
@@ -51,8 +53,8 @@ class ReportController extends Controller
             ];
         });
 
-        $totalBookings = Booking::whereYear('created_at', $year)->count();
-        $totalRevenue = Booking::whereYear('created_at', $year)
+        $totalBookings = Booking::whereYear(DB::raw($scheduleDateColumn), $year)->count();
+        $totalRevenue = Booking::whereYear(DB::raw($scheduleDateColumn), $year)
             ->whereIn('payment_status', self::PAID_STATUSES)
             ->sum('total_price');
 
@@ -68,7 +70,7 @@ class ReportController extends Controller
                 DB::raw('SUM(booking_items.quantity) as total_quantity'),
                 DB::raw("SUM(CASE WHEN bookings.payment_status IN ($paidStatusesSql) THEN booking_items.subtotal ELSE 0 END) as total_revenue")
             )
-            ->whereYear('bookings.created_at', $year)
+            ->whereYear(DB::raw($qualifiedScheduleDateColumn), $year)
             ->groupBy('products.id', 'products.name')
             ->orderByDesc('total_quantity')
             ->limit(10)
