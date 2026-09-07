@@ -39,6 +39,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('products', ProductController::class)->except(['show']);
+    Route::patch('/products/images/{productImage}', [ProductController::class, 'replaceImage'])->name('products.images.replace');
+    Route::delete('/products/images/{productImage}', [ProductController::class, 'destroyImage'])->name('products.images.destroy');
     Route::resource('payment-methods', PaymentMethodController::class)->except(['show']);
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');

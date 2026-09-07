@@ -9,6 +9,7 @@
         body { background-color: #f5f7fb; }
         .content-card { border: 0; border-radius: 18px; box-shadow: 0 10px 30px rgba(15, 23, 42, .08); }
         .product-preview { width: 160px; height: 120px; object-fit: cover; border-radius: 14px; background: #e5e7eb; }
+        .gallery-preview { width: 100%; height: 140px; object-fit: cover; border-radius: 14px; background: #e5e7eb; }
     </style>
 </head>
 <body>
@@ -87,17 +88,16 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="image" class="form-label">Gambar Produk</label>
-
-                                @if ($product->image)
-                                    <div class="mb-2">
-                                        <img src="{{ asset('storage/' . $product->image) }}" class="product-preview" alt="{{ $product->name }}">
-                                    </div>
-                                @endif
-
-                                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
-                                <div class="form-text">Kosongkan jika tidak ingin mengganti gambar.</div>
-                                @error('image')
+                                <label for="images" class="form-label">Tambah Foto Produk</label>
+                                <input type="file" class="form-control @error('images') is-invalid @enderror @error('images.*') is-invalid @enderror" id="images" name="images[]" accept="image/*" multiple @disabled($product->images->count() >= 5)>
+                                <div class="form-text">
+                                    Upload tambahan tanpa menghapus foto lama. Maksimal total 5 foto.
+                                    Saat ini: {{ $product->images->count() ?: ($product->image ? 1 : 0) }} foto.
+                                </div>
+                                @error('images')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                @error('images.*')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -112,6 +112,45 @@
                                 <a href="{{ route('admin.products.index') }}" class="btn btn-light">Batal</a>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <div class="card content-card mt-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-1">Foto Produk</h5>
+                        <p class="text-muted mb-4">Preview seluruh foto produk. Kamu bisa mengganti atau menghapus satu foto tanpa memengaruhi foto lainnya.</p>
+
+                        @if ($product->images->isNotEmpty())
+                            <div class="row g-3">
+                                @foreach ($product->images as $image)
+                                    <div class="col-md-4">
+                                        <div class="border rounded-4 p-3 h-100">
+                                            <img src="{{ $product->imageUrl($image->image) }}" class="gallery-preview mb-3" alt="{{ $product->name }}">
+
+                                            <form action="{{ route('admin.products.images.replace', $image) }}" method="POST" enctype="multipart/form-data" class="mb-2">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="file" name="replacement_image" class="form-control form-control-sm mb-2" accept="image/*" required>
+                                                <button type="submit" class="btn btn-warning btn-sm w-100">Ganti Foto</button>
+                                            </form>
+
+                                            <form action="{{ route('admin.products.images.destroy', $image) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus foto ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">Hapus Foto</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @elseif ($product->image)
+                            <div class="alert alert-info">
+                                Produk ini masih memakai foto lama dari kolom <code>products.image</code>. Upload foto baru pada form edit di atas untuk mulai memakai fitur multiple images.
+                            </div>
+                            <img src="{{ $product->imageUrl() }}" class="product-preview" alt="{{ $product->name }}">
+                        @else
+                            <div class="alert alert-warning mb-0">Produk ini belum memiliki foto.</div>
+                        @endif
                     </div>
                 </div>
             </div>

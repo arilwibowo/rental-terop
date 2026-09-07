@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="col-md-5 mt-3 mt-md-0 text-md-end">
                                         @if ($paymentMethod->qris_image)
-                                            <img src="{{ asset('storage/' . $paymentMethod->qris_image) }}" class="qris-image" alt="QRIS {{ $paymentMethod->bank_name }}">
+                                            <img src="{{ $paymentMethod->qrisImageUrl() }}" class="qris-image" alt="QRIS {{ $paymentMethod->bank_name }}">
                                         @endif
                                     </div>
                                 </div>
@@ -158,8 +158,8 @@
 
                         @if ($booking->payment_proof)
                             <p class="text-muted mb-2">Bukti pembayaran saat ini:</p>
-                            <a href="{{ asset('storage/' . $booking->payment_proof) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $booking->payment_proof) }}" alt="Bukti pembayaran" class="img-fluid rounded border mb-3" style="max-height: 260px;">
+                            <a href="{{ $booking->paymentProofUrl() }}" target="_blank">
+                                <img src="{{ $booking->paymentProofUrl() }}" alt="Bukti pembayaran" class="img-fluid rounded border mb-3" style="max-height: 260px;">
                             </a>
                         @endif
 

@@ -85,6 +85,19 @@
             transform: scale(1.035);
         }
 
+        .product-thumbnails {
+            overflow-x: auto;
+            background: #fffaf0;
+        }
+
+        .product-thumbnail img {
+            width: 42px;
+            height: 42px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #fde68a;
+        }
+
         .badge-gold {
             color: #78350f;
             background: #fef3c7;
@@ -212,6 +225,18 @@
                 font-size: .52rem;
                 line-height: 1.2;
             }
+
+            .product-thumbnails {
+                gap: .2rem !important;
+                padding: .25rem !important;
+            }
+
+            .product-thumbnail img {
+                width: 20px;
+                height: 20px;
+                border-radius: 5px;
+                border-width: 1px;
+            }
         }
     </style>
 </head>
@@ -316,13 +341,7 @@
                             @php $isOutOfStock = $product->stock < 1; @endphp
                             <div class="col-3 col-md-6 col-xl-4">
                                 <div class="card h-100 border-0 product-card-premium">
-                                    @if ($product->image)
-                                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
-                                    @else
-                                        <div class="product-placeholder d-flex align-items-center justify-content-center text-muted">
-                                            Belum ada gambar
-                                        </div>
-                                    @endif
+                                    @include('partials.product-gallery', ['product' => $product, 'galleryId' => 'products-page-gallery-' . $product->id])
 
                                     <div class="card-body d-flex flex-column">
                                         <div class="mb-2">
@@ -387,5 +406,16 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('[data-gallery-target]').forEach((thumbnail) => {
+            thumbnail.addEventListener('click', () => {
+                const target = document.getElementById(thumbnail.dataset.galleryTarget);
+
+                if (target) {
+                    target.src = thumbnail.dataset.imageSrc;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

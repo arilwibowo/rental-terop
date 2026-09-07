@@ -12,7 +12,7 @@ class CartController extends Controller
     public function index(): View
     {
         $cart = session('cart', []);
-        $products = Product::with('category')
+        $products = Product::with(['category', 'images'])
             ->whereIn('id', array_keys($cart))
             ->get();
 

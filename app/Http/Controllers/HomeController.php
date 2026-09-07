@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        $products = Product::with('category')
+        $products = Product::with(['category', 'images'])
             ->where('is_active', true)
             ->latest()
             ->limit(6)
@@ -28,7 +28,7 @@ class HomeController extends Controller
             'products' => fn ($query) => $query->where('is_active', true),
         ])->orderBy('name')->get();
 
-        $products = Product::with('category')
+        $products = Product::with(['category', 'images'])
             ->where('is_active', true)
             ->when($request->filled('category'), function ($query) use ($request) {
                 $query->whereHas('category', function ($categoryQuery) use ($request) {

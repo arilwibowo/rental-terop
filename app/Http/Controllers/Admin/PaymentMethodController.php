@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentMethod;
+use App\Support\PublicImageStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PaymentMethodController extends Controller
@@ -36,7 +36,7 @@ class PaymentMethodController extends Controller
         $qrisPath = null;
 
         if ($request->hasFile('qris_image')) {
-            $qrisPath = $request->file('qris_image')->store('qris', 'public');
+            $qrisPath = PublicImageStorage::store($request->file('qris_image'), 'qris');
         }
 
         PaymentMethod::create([
@@ -69,10 +69,10 @@ class PaymentMethodController extends Controller
 
         if ($request->hasFile('qris_image')) {
             if ($paymentMethod->qris_image) {
-                Storage::disk('public')->delete($paymentMethod->qris_image);
+                PublicImageStorage::delete($paymentMethod->qris_image);
             }
 
-            $qrisPath = $request->file('qris_image')->store('qris', 'public');
+            $qrisPath = PublicImageStorage::store($request->file('qris_image'), 'qris');
         }
 
         $paymentMethod->update([
@@ -89,7 +89,7 @@ class PaymentMethodController extends Controller
     public function destroy(PaymentMethod $paymentMethod): RedirectResponse
     {
         if ($paymentMethod->qris_image) {
-            Storage::disk('public')->delete($paymentMethod->qris_image);
+            PublicImageStorage::delete($paymentMethod->qris_image);
         }
 
         $paymentMethod->delete();

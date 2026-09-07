@@ -41,8 +41,8 @@
         <div class="row g-4">
             <div class="col-lg-5">
                 <div class="card content-card overflow-hidden">
-                    @if ($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top product-image" alt="{{ $product->name }}">
+                    @if ($product->primaryImage())
+                        <img src="{{ $product->imageUrl() }}" class="card-img-top product-image" alt="{{ $product->name }}">
                     @else
                         <div class="product-placeholder d-flex align-items-center justify-content-center text-muted">
                             Belum ada gambar

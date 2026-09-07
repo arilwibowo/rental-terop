@@ -94,8 +94,8 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center gap-3">
-                                                    @if ($product->image)
-                                                        <img src="{{ asset('storage/' . $product->image) }}" class="product-thumb" alt="{{ $product->name }}">
+                                                    @if ($product->primaryImage())
+                                                        <img src="{{ $product->imageUrl() }}" class="product-thumb" alt="{{ $product->name }}">
                                                     @else
                                                         <div class="product-thumb d-flex align-items-center justify-content-center text-muted small">No Img</div>
                                                     @endif

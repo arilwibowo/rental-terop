@@ -86,10 +86,13 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="image" class="form-label">Gambar Produk</label>
-                                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
-                                <div class="form-text">Format: JPG, PNG, WEBP. Maksimal 2MB.</div>
-                                @error('image')
+                                <label for="images" class="form-label">Foto Produk</label>
+                                <input type="file" class="form-control @error('images') is-invalid @enderror @error('images.*') is-invalid @enderror" id="images" name="images[]" accept="image/*" multiple>
+                                <div class="form-text">Pilih maksimal 5 foto. Format: JPG, PNG, WEBP. Maksimal 2MB per foto.</div>
+                                @error('images')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                @error('images.*')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

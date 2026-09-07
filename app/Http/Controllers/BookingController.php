@@ -6,11 +6,11 @@ use App\Models\Booking;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\WebsiteSetting;
+use App\Support\PublicImageStorage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,6 +19,8 @@ class BookingController extends Controller
     public function create(Product $product): View
     {
         abort_unless($product->is_active, 404);
+
+        $product->load('images');
 
         return view('bookings.create', compact('product'));
     }
@@ -81,10 +83,10 @@ class BookingController extends Controller
         ]);
 
         if ($booking->payment_proof) {
-            Storage::disk('public')->delete($booking->payment_proof);
+            PublicImageStorage::delete($booking->payment_proof);
         }
 
-        $path = $validated['payment_proof']->store('payment-proofs', 'public');
+        $path = PublicImageStorage::store($validated['payment_proof'], 'payment-proofs');
 
         $booking->update([
             'payment_proof' => $path,
