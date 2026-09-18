@@ -11,6 +11,8 @@
         .sidebar .nav-link { color: #cbd5e1; border-radius: 10px; padding: 10px 14px; }
         .sidebar .nav-link.active, .sidebar .nav-link:hover { color: #fff; background: #2563eb; }
         .content-card { border: 0; border-radius: 18px; box-shadow: 0 10px 30px rgba(15, 23, 42, .08); }
+
+        @include('admin.partials.mobile-desktop-layout')
     </style>
 </head>
 <body>

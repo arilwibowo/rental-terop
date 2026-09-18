@@ -61,8 +61,8 @@
                         <h5 class="fw-bold mb-3">Bukti Pembayaran</h5>
 
                         @if ($booking->payment_proof)
-                            <a href="{{ asset('storage/' . $booking->payment_proof) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $booking->payment_proof) }}" class="proof-image mb-3" alt="Bukti pembayaran">
+                            <a href="{{ $booking->paymentProofUrl() }}" target="_blank">
+                                <img src="{{ $booking->paymentProofUrl() }}" class="proof-image mb-3" alt="Bukti pembayaran">
                             </a>
                         @else
                             <div class="alert alert-warning">Customer belum upload bukti pembayaran.</div>

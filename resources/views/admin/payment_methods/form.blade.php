@@ -18,11 +18,15 @@
 
 <div class="mb-3">
     <label for="qris_image" class="form-label">Upload Gambar QRIS</label>
-    @if ($paymentMethod?->qris_image)
-        <div class="mb-2">
-            <img src="{{ asset('storage/' . $paymentMethod->qris_image) }}" alt="QRIS" class="img-fluid rounded border" style="max-height: 180px;">
-        </div>
-    @endif
+    <div id="qris-preview-wrap" class="mb-2 @if (! $paymentMethod?->qris_image) d-none @endif">
+        <img
+            id="qris-preview"
+            src="{{ $paymentMethod?->qrisImageUrl() }}"
+            alt="Preview QRIS"
+            class="img-fluid rounded border"
+            style="max-height: 180px;"
+        >
+    </div>
     <input type="file" class="form-control @error('qris_image') is-invalid @enderror" id="qris_image" name="qris_image" accept="image/*">
     <div class="form-text">Format JPG, PNG, WEBP. Maksimal 2MB.</div>
     @error('qris_image')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -37,3 +41,13 @@
     <button class="btn btn-primary">Simpan</button>
     <a href="{{ route('admin.payment-methods.index') }}" class="btn btn-light">Batal</a>
 </div>
+
+<script>
+    document.getElementById('qris_image')?.addEventListener('change', (event) => {
+        const image = event.target.files?.[0];
+        if (! image) return;
+
+        document.getElementById('qris-preview').src = URL.createObjectURL(image);
+        document.getElementById('qris-preview-wrap').classList.remove('d-none');
+    });
+</script>

@@ -273,6 +273,10 @@
             border-color: #fbbf24;
         }
 
+        .contact-action-short {
+            display: none;
+        }
+
         @keyframes heroFadeUp {
             from {
                 opacity: 0;
@@ -337,6 +341,7 @@
             }
 
             .product-card-premium {
+                height: 232px !important;
                 border-radius: 16px;
                 box-shadow: 0 10px 24px rgba(15, 23, 42, .08) !important;
             }
@@ -362,6 +367,10 @@
             }
 
             .product-card-premium .card-text {
+                display: none;
+            }
+
+            .product-card-premium .alert {
                 display: none;
             }
 
@@ -394,41 +403,51 @@
             }
 
             .contact-premium .row {
-                --bs-gutter-x: .55rem;
-                --bs-gutter-y: .55rem;
+                --bs-gutter-x: .45rem;
+                --bs-gutter-y: 0;
             }
 
             .contact-card {
-                border-radius: 16px;
+                border-radius: 14px;
             }
 
             .contact-card .card-body {
-                padding: .7rem;
+                padding: .55rem .4rem;
             }
 
             .contact-icon {
-                width: 34px;
-                height: 34px;
-                border-radius: 12px;
-                font-size: .72rem;
-                margin-bottom: .55rem;
+                width: 32px;
+                height: 32px;
+                border-radius: 11px;
+                font-size: .68rem;
+                margin-bottom: .45rem;
             }
 
             .contact-card h5 {
-                font-size: .82rem;
+                min-height: 2.4em;
+                font-size: .72rem;
+                line-height: 1.2;
+                margin-bottom: .45rem;
             }
 
             .contact-card p {
-                font-size: .72rem;
-                line-height: 1.35;
+                display: none;
             }
 
             .contact-card .btn {
                 width: 100%;
-                padding: .4rem .25rem;
-                font-size: .68rem;
+                padding: .4rem .15rem;
+                font-size: .62rem;
                 line-height: 1.2;
-                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            .contact-action-full {
+                display: none;
+            }
+
+            .contact-action-short {
+                display: inline;
             }
         }
     </style>
@@ -632,7 +651,8 @@
                             <h5 class="fw-bold">WhatsApp</h5>
                             <p class="text-muted mb-3">Tanya harga dan ketersediaan produk.</p>
                             <a href="https://wa.me/{{ $setting->admin_whatsapp }}" class="btn btn-gold fw-semibold">
-                                Chat WhatsApp
+                                <span class="contact-action-full">Chat WhatsApp</span>
+                                <span class="contact-action-short">Chat</span>
                             </a>
                         </div>
                     </div>
@@ -647,7 +667,8 @@
                                 Lihat dokumentasi dan update terbaru kami.
                             </p>
                             <a href="https://www.instagram.com/hartonojayaterop" target="_blank" class="btn btn-contact-outline fw-semibold">
-                                @hartonojayaterop
+                                <span class="contact-action-full">@hartonojayaterop</span>
+                                <span class="contact-action-short">Instagram</span>
                             </a>
                         </div>
                     </div>
@@ -666,7 +687,8 @@
                                 target="_blank"
                                 class="btn btn-contact-outline fw-semibold"
                             >
-                                Lihat Lokasi
+                                <span class="contact-action-full">Lihat Lokasi</span>
+                                <span class="contact-action-short">Lokasi</span>
                             </a>
                         </div>
                     </div>

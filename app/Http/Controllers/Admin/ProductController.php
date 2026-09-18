@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\BookingItem;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Support\PublicImageStorage;
@@ -140,16 +141,38 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
-        if ($product->image) {
-            PublicImageStorage::delete($product->image);
-        }
-
         $product->load('images');
-        foreach ($product->images as $image) {
-            PublicImageStorage::delete($image->image);
-        }
+        $imagePaths = $product->images
+            ->pluck('image')
+            ->push($product->image)
+            ->filter()
+            ->unique();
 
-        $product->delete();
+        $paymentProofPaths = collect();
+
+        DB::transaction(function () use ($product, $paymentProofPaths) {
+            BookingItem::where('product_id', $product->id)->delete();
+
+            foreach ($product->bookings()->get() as $booking) {
+                $replacementProductId = BookingItem::where('booking_id', $booking->id)->value('product_id');
+
+                if ($replacementProductId) {
+                    $booking->update(['product_id' => $replacementProductId]);
+                    continue;
+                }
+
+                if ($booking->payment_proof) {
+                    $paymentProofPaths->push($booking->payment_proof);
+                }
+
+                $booking->delete();
+            }
+
+            $product->delete();
+        });
+
+        $imagePaths->each(fn (string $imagePath) => PublicImageStorage::delete($imagePath));
+        $paymentProofPaths->unique()->each(fn (string $imagePath) => PublicImageStorage::delete($imagePath));
 
         return redirect()
             ->route('admin.products.index')

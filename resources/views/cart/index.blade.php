@@ -8,6 +8,78 @@
     <style>
         body { background-color: #f8fafc; }
         .product-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; background: #e5e7eb; }
+
+        .cart-mobile-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .cart-mobile-item:last-child {
+            border-bottom: 0;
+        }
+
+        .cart-mobile-product {
+            min-width: 0;
+        }
+
+        .cart-mobile-name {
+            overflow-wrap: anywhere;
+        }
+
+        .cart-mobile-details {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .5rem;
+            margin-top: 1rem;
+        }
+
+        .cart-mobile-details dt {
+            margin-bottom: .2rem;
+            color: #64748b;
+            font-size: .72rem;
+            font-weight: 600;
+        }
+
+        .cart-mobile-details dd {
+            margin: 0;
+            font-size: .84rem;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .cart-mobile-details .cart-qty {
+            width: 100%;
+            min-width: 0;
+            padding: .35rem .45rem;
+            font-size: .84rem;
+        }
+
+        @media (max-width: 767.98px) {
+            main.container {
+                padding: 2rem 1rem !important;
+            }
+
+            .cart-header {
+                align-items: stretch !important;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .cart-header .btn,
+            .cart-actions .btn {
+                width: 100%;
+            }
+
+            .product-thumb {
+                width: 64px;
+                height: 64px;
+                flex: 0 0 64px;
+            }
+
+            .cart-mobile-details {
+                grid-template-columns: 1fr 72px 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -42,7 +114,7 @@
     </nav>
 
     <main class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="cart-header d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h1 class="h3 fw-bold mb-1">Keranjang</h1>
                 <p class="text-muted mb-0">Ubah qty atau hapus produk sebelum checkout.</p>
@@ -69,7 +141,7 @@
 
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive d-none d-md-block">
                             <table class="table align-middle">
                                 <thead>
                                     <tr>
@@ -124,7 +196,7 @@
                                                 >
                                                 <div class="small text-muted">Stok: {{ $product->stock }}</div>
                                             </td>
-                                            <td class="text-end">Rp {{ number_format($subtotal, 0, ',', '.') }}</td>
+                                            <td class="text-end cart-subtotal" data-subtotal-id="{{ $product->id }}">Rp {{ number_format($subtotal, 0, ',', '.') }}</td>
                                             <td>
                                                 <button type="submit" form="remove-product-{{ $product->id }}" class="btn btn-danger btn-sm">
                                                     Hapus
@@ -136,14 +208,78 @@
                                 <tfoot>
                                     <tr>
                                         <th colspan="4" class="text-end">Total Sementara</th>
-                                        <th class="text-end text-primary">Rp {{ number_format($grandTotal, 0, ',', '.') }}</th>
+                                        <th class="text-end text-primary cart-grand-total">Rp {{ number_format($grandTotal, 0, ',', '.') }}</th>
                                         <th></th>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
 
-                        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+                        <div class="mobile-cart-list d-md-none">
+                            @foreach ($products as $product)
+                                @php
+                                    $qty = $cart[$product->id] ?? 1;
+                                    $isOutOfStock = $product->stock < 1;
+                                    $isQtyOverStock = $qty > $product->stock;
+                                    $subtotal = $product->price * $qty;
+                                @endphp
+                                <article class="cart-mobile-item">
+                                    <div class="d-flex align-items-center gap-3">
+                                        @if ($product->primaryImage())
+                                            <img src="{{ $product->imageUrl() }}" class="product-thumb" alt="{{ $product->name }}">
+                                        @else
+                                            <div class="product-thumb d-flex align-items-center justify-content-center text-muted small">No Img</div>
+                                        @endif
+                                        <div class="cart-mobile-product">
+                                            <div class="cart-mobile-name fw-semibold">{{ $product->name }}</div>
+                                            <div class="small text-muted">{{ $product->category->name ?? '-' }}</div>
+                                            @if ($isOutOfStock || $isQtyOverStock)
+                                                <span class="badge text-bg-danger mt-1">STOK HABIS</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <dl class="cart-mobile-details">
+                                        <div>
+                                            <dt>Harga</dt>
+                                            <dd>Rp {{ number_format($product->price, 0, ',', '.') }}</dd>
+                                        </div>
+                                        <div>
+                                            <dt>Jumlah</dt>
+                                            <dd>
+                                                <input
+                                                    type="number"
+                                                    name="qty[{{ $product->id }}]"
+                                                    value="{{ $qty }}"
+                                                    min="1"
+                                                    max="{{ max($product->stock, 1) }}"
+                                                    class="form-control cart-qty"
+                                                    data-price="{{ $product->price }}"
+                                                    data-product-id="{{ $product->id }}"
+                                                    @disabled($isOutOfStock)
+                                                >
+                                            </dd>
+                                            <div class="small text-muted mt-1">Stok: {{ $product->stock }}</div>
+                                        </div>
+                                        <div>
+                                            <dt>Subtotal</dt>
+                                            <dd class="cart-subtotal" data-subtotal-id="{{ $product->id }}">Rp {{ number_format($subtotal, 0, ',', '.') }}</dd>
+                                        </div>
+                                    </dl>
+
+                                    <button type="submit" form="remove-product-{{ $product->id }}" class="btn btn-outline-danger btn-sm w-100 mt-3">
+                                        Hapus Produk
+                                    </button>
+                                </article>
+                            @endforeach
+                        </div>
+
+                        <div class="d-flex d-md-none justify-content-between align-items-center border-top pt-3 mt-2 fw-bold">
+                            <span>Total Sementara</span>
+                            <span class="text-primary cart-grand-total">Rp {{ number_format($grandTotal, 0, ',', '.') }}</span>
+                        </div>
+
+                        <div class="cart-actions d-flex flex-column flex-md-row justify-content-between gap-2 mt-3">
                             <div></div>
                             @if ($hasStockProblem)
                                 <button type="button" class="btn btn-primary" disabled>Lanjut Checkout</button>
@@ -166,7 +302,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const qtyInputs = document.querySelectorAll('.cart-qty');
+        const qtyInputs = Array.from(document.querySelectorAll('.cart-qty'));
         const updateUrl = "{{ route('cart.update') }}";
         const csrfToken = "{{ csrf_token() }}";
         let saveTimer = null;
@@ -182,28 +318,41 @@
         function updateCartDisplay() {
             let grandTotal = 0;
 
-            qtyInputs.forEach((input) => {
+            uniqueQtyInputs().forEach((input) => {
                 const price = Number(input.dataset.price);
                 const qty = input.value === '' ? 0 : Number(input.value);
                 const subtotal = price * qty;
-                const row = input.closest('tr');
-                const subtotalCell = row.querySelector('td.text-end');
 
                 grandTotal += subtotal;
-                subtotalCell.textContent = formatRupiah(subtotal);
+                document.querySelectorAll(`[data-subtotal-id="${input.dataset.productId}"]`).forEach((subtotalCell) => {
+                    subtotalCell.textContent = formatRupiah(subtotal);
+                });
             });
 
-            const grandTotalCell = document.querySelector('tfoot .text-primary');
-            if (grandTotalCell) {
+            document.querySelectorAll('.cart-grand-total').forEach((grandTotalCell) => {
                 grandTotalCell.textContent = formatRupiah(grandTotal);
-            }
+            });
+        }
+
+        function uniqueQtyInputs() {
+            return qtyInputs.filter((input, index, inputs) =>
+                inputs.findIndex((candidate) => candidate.dataset.productId === input.dataset.productId) === index
+            );
+        }
+
+        function syncProductQty(productId, value) {
+            qtyInputs
+                .filter((input) => input.dataset.productId === productId)
+                .forEach((input) => {
+                    input.value = value;
+                });
         }
 
         function collectQtyData() {
             const data = new FormData();
             data.append('_method', 'PATCH');
 
-            qtyInputs.forEach((input) => {
+            uniqueQtyInputs().forEach((input) => {
                 data.append(`qty[${input.dataset.productId}]`, input.value || 1);
             });
 
@@ -211,7 +360,7 @@
         }
 
         function hasInvalidQty() {
-            return Array.from(qtyInputs).some((input) => {
+            return uniqueQtyInputs().some((input) => {
                 if (input.value === '') {
                     return true;
                 }
@@ -249,6 +398,7 @@
         qtyInputs.forEach((input) => {
             input.addEventListener('input', () => {
                 if (input.value === '') {
+                    syncProductQty(input.dataset.productId, '');
                     updateCartDisplay();
                     clearTimeout(saveTimer);
                     return;
@@ -260,7 +410,7 @@
 
                 if (value < min) value = min;
                 if (value > max) value = max;
-                input.value = value;
+                syncProductQty(input.dataset.productId, value);
 
                 updateCartDisplay();
 
@@ -270,7 +420,7 @@
 
             input.addEventListener('blur', () => {
                 if (input.value === '') {
-                    input.value = input.min || 1;
+                    syncProductQty(input.dataset.productId, input.min || 1);
                     updateCartDisplay();
                     saveCart();
                 }

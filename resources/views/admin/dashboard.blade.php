@@ -33,6 +33,8 @@
             border-radius: 18px;
             box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
         }
+
+        @include('admin.partials.mobile-desktop-layout')
     </style>
 </head>
 <body>

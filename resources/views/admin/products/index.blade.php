@@ -12,6 +12,8 @@
         .sidebar .nav-link.active, .sidebar .nav-link:hover { color: #fff; background: #2563eb; }
         .content-card { border: 0; border-radius: 18px; box-shadow: 0 10px 30px rgba(15, 23, 42, .08); }
         .product-thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; background: #e5e7eb; }
+
+        @include('admin.partials.mobile-desktop-layout')
     </style>
 </head>
 <body>
@@ -103,7 +105,11 @@
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                                                    <form action="{{ route('admin.products.destroy', $product) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                                    <form
+                                                        action="{{ route('admin.products.destroy', $product) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Yakin ingin menghapus produk ini? Riwayat booking produk ini juga akan dihapus.')"
+                                                    >
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm">Hapus</button>

@@ -12,6 +12,8 @@
         .sidebar .nav-link.active, .sidebar .nav-link:hover { color: #fff; background: #2563eb; }
         .content-card { border: 0; border-radius: 18px; box-shadow: 0 10px 30px rgba(15, 23, 42, .08); }
         .qris-thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; background: #e5e7eb; }
+
+        @include('admin.partials.mobile-desktop-layout')
     </style>
 </head>
 <body>
@@ -69,7 +71,7 @@
                                             <td>{{ $paymentMethod->account_holder }}</td>
                                             <td>
                                                 @if ($paymentMethod->qris_image)
-                                                    <img src="{{ asset('storage/' . $paymentMethod->qris_image) }}" class="qris-thumb" alt="QRIS">
+                                                    <img src="{{ $paymentMethod->qrisImageUrl() }}" class="qris-thumb" alt="QRIS">
                                                 @else
                                                     <span class="text-muted">-</span>
                                                 @endif
