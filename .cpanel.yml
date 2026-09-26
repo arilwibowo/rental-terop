@@ -1,13 +1,17 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/harq4437/
+
     - /bin/cp -R app/. $DEPLOYPATH/app/
     - /bin/cp -R bootstrap/. $DEPLOYPATH/bootstrap/
     - /bin/cp -R config/. $DEPLOYPATH/config/
     - /bin/cp -R database/. $DEPLOYPATH/database/
-    - /bin/cp -R public/. $DEPLOYPATH/public_html/
     - /bin/cp -R resources/. $DEPLOYPATH/resources/
     - /bin/cp -R routes/. $DEPLOYPATH/routes/
+    - /bin/cp -R vendor/. $DEPLOYPATH/vendor/
+
+    - /bin/cp -R public/. $DEPLOYPATH/public_html/
+
     - /bin/cp artisan $DEPLOYPATH
     - /bin/cp composer.json $DEPLOYPATH
     - /bin/cp composer.lock $DEPLOYPATH
