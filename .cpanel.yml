@@ -8,7 +8,6 @@ deployment:
     - /bin/cp -R database/. $DEPLOYPATH/database/
     - /bin/cp -R resources/. $DEPLOYPATH/resources/
     - /bin/cp -R routes/. $DEPLOYPATH/routes/
-    - /bin/cp -R vendor/. $DEPLOYPATH/vendor/
 
     - /bin/cp -R public/. $DEPLOYPATH/public_html/
 
